@@ -1,24 +1,35 @@
-import logo from './logo.svg';
+import {Routes,Route} from 'react-router-dom';
+import { DatePicker, Layout } from 'antd';
+import { useState } from 'react';
+
+import Home from './containers/Home/Home';
+import Products from './containers/Products/Products';
+import Items from './containers/Items/Items';
+import MenuComponent from './components/MenuComponent/MenuComponent';
+
+
 import './App.css';
+import 'antd/dist/antd.css'; 
+
+const { Header, Content, Footer, Sider } = Layout;
 
 function App() {
+  const [collapsed, setCollapsed] = useState(false);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout      
+    style={{
+      minHeight: '100vh',
+    }}>
+      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+        <MenuComponent />
+      </Sider>
+    
+      <Routes>
+        <Route path ='/' element={<Home/>} />
+        <Route path ='/products' element={<Products/>} />
+        <Route path ='/items' element={<Items/>} />
+      </Routes>
+    </Layout>
   );
 }
 
