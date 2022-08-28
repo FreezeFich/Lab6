@@ -6,6 +6,7 @@ import Home from './containers/Home/Home';
 import Products from './containers/Products/Products';
 import Items from './containers/Items/Items';
 import MenuComponent from './components/MenuComponent/MenuComponent';
+import TableComponent from './components/TableComponent/TableComponent';
 
 
 import './App.css';
