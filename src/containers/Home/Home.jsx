@@ -3,19 +3,12 @@ import { Button, Table, Modal } from 'antd';
 import axios from 'axios';
 import './Home.scss';
 
-// developers: ['Lucid Sheep Games']
-// genre: ['Party']
-// id: 1
-// name: "#Breakforcist Battle"
-// publishers: ['Lucid Sheep Games']
-// releaseDates: {Japan: 'Unreleased', NorthAmerica: 'April 12, 2018', Europe:
 export const BASE_URL = 'https://api.sampleapis.com';
 
 function Home() {
   const [loading, setLoading] = useState(false)
-  const [isModalVisible, setIsModalVisible] = useState(false)
-  const [activeItem, setActiveItem] = useState(null);
   const [data, setData] = useState([])
+  
 
   useEffect(() => {
     fetchGames();
@@ -24,7 +17,7 @@ function Home() {
   const fetchGames = async () => {
     try {
       setLoading(true)
-      const response = await axios.get(`${BASE_URL}/switch/games`);
+      const response = await axios.get(`${BASE_URL}/cartoons/cartoons2D`);
       setData(response.data)
       setLoading(false)
     } catch (error) {
@@ -35,36 +28,56 @@ function Home() {
   
   const columns = [
     {
-      title: 'Name of The Game',
-      dataIndex: 'name',
-      key: 'name',
-      sorter: (a, b) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : (a.name === b.name ? 0 : -1)),
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+      sorter: (a, b) => a.id - b.id,
+      sortDirections: ['descend'],
+      width: 20,
     },
     {
-      title: 'Genre',
-      dataIndex: 'genre',
-      key: 'genre',
-      sorter: (a, b) => {
-        return a.genre.length - b.genre.length
-      },
-
-      render: (key, item) => {  
-        const result = Array.isArray(item.genre) 
-          ? item.genre.join(', ') 
-          : item.genre;
-        return <div>{result}</div>
-      }
+      title: 'Name of The Cartoon',
+      dataIndex: 'title',
+      key: 'title',
+      sorter: (a, b) => (a.title.toLowerCase() > b.title.toLowerCase() ? 1 : (a.title === b.title ? 0 : -1)),
+      width: 500,
     },
     {
-      title: 'Publishers',
-      dataIndex: 'publishers',
-      key: 'publishers',
+      title: 'Year of release',
+      dataIndex: 'year',
+      key: 'year',
+      sorter: (a, b) => a.year - b.year,
     },
     {
-      title: 'Developers',
-      dataIndex: 'developers',
-      key: 'developers',
+      title: 'Number of Episodes',
+      dataIndex: 'episodes',
+      key: 'episodes',
+      sorter: (a, b) => a.episodes - b.episodes,
     },
+    {
+      title: 'Rating',
+      dataIndex: 'rating',
+      key: 'rating',
+      filters: [
+        {
+          text: 'TV-PG',
+          value: 'TV-PG',
+        },
+        {
+          text: 'TV-MA',
+          value: 'TV-MA',
+        },
+        {
+          text: 'TV-Y7',
+          value: 'TV-Y7',
+        },
+        {
+          text: 'TV-G',
+          value: 'TV-G',
+        }
+        ],
+      onFilter: (value, record) => record.rating.indexOf(value) === 0,
+    }
   ];
 
   return (
@@ -77,34 +90,8 @@ function Home() {
         size={'small'}
         width="100%"
         className="table"
-        onRow={(record, rowIndex) => {
-          return {
-            onClick: () => setActiveItem(record)
-          }
-        }}
         // pagination={false}
       />
-
-      <Modal 
-        title={activeItem?.name} 
-        visible={!!activeItem}
-        footer={null}
-        onCancel={() => setActiveItem(null)}
-      >
-        {activeItem && <>
-          <p>Genre: <b>{activeItem.genre}</b></p>
-          <p>Developers: <b>{activeItem.developers}</b></p>
-          <p>Publishers: <b>{activeItem.publishers}</b></p>
-          <p>Release Dates: {
-            Object.keys(activeItem.releaseDates).map(country => (
-              <div>
-                <span>{country}{' '}</span>
-                <b>{activeItem.releaseDates[country]}</b>
-              </div>
-            ))
-          }</p>
-        </>}
-      </Modal>
     </div>
   )
 }

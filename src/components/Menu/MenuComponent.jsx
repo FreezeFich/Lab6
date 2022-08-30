@@ -7,7 +7,7 @@ function MenuComponent(props) {
   const navigate = useNavigate();
   const items = [
     {label: 'Home', key: '/'},
-    {label: 'Products', key: '/products'},
+    {label: 'About Us', key: '/products'},
   ]
 
   const handleMenuClick = (item) => {
